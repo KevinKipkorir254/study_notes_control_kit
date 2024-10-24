@@ -78,6 +78,6 @@ function animate_cart_pole(t, s, l)
         ylim([-1 1]);
 
         % Pause to create animation effect
-        pause(0.05);
+        pause(0.005);
     end
 end

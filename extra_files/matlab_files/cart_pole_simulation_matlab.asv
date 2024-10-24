@@ -23,11 +23,8 @@ function cart_pole_simulation
     plot(t, s(:,2));  % Plot theta (pendulum angle)
     ylabel('Pendulum Angle');
 
-    %%figure;
-    %%plot(s(:,1), s(:,3)) 
-
-    figure;
-    plot(s(:,2), s(:,4));
+    figure:
+    plot(s(:,1),  )
 end
 
 function ds = cart_pole_ode(~, s, M, m, l, g)

@@ -11,10 +11,10 @@ function cart_pole_simulation
     % Time span
     tspan = [0 1000];
 
-    % Solve ODE
-    [t, s] = ode45(@(t,s) cart_pole_ode(t, s, M, m, l, g), tspan, s0);
+    % Solve ODE and store energy over time
+    [t, s, energy] = ode45(@(t,s) cart_pole_ode(t, s, M, m, l, g), tspan, s0);
 
-    % Plot results
+    % Plot Cart Position and Pendulum Angle
     figure;
     subplot(2,1,1);
     plot(t, s(:,1));  % Plot x (cart position)
@@ -22,15 +22,16 @@ function cart_pole_simulation
     subplot(2,1,2);
     plot(t, s(:,2));  % Plot theta (pendulum angle)
     ylabel('Pendulum Angle');
-
-    %%figure;
-    %%plot(s(:,1), s(:,3)) 
-
+    
+    % Plot Energy vs. Time
     figure;
-    plot(s(:,2), s(:,4));
+    plot(t, energy);
+    xlabel('Time (s)');
+    ylabel('Energy (J)');
+    title('Energy vs. Time');
 end
 
-function ds = cart_pole_ode(~, s, M, m, l, g)
+function [ds, energy] = cart_pole_ode(~, s, M, m, l, g)
     x = s(1);
     theta = s(2);
     dx = s(3);
@@ -45,37 +46,32 @@ function ds = cart_pole_ode(~, s, M, m, l, g)
     % Gravity vector G(q)
     Gq = [0; -m*g*l*sin(theta)];
 
-   %attempt 1 to add the control law
-    % Define variables
+    % Energy calculation
+    zeds = [dx; dtheta];
+    E = (1/2)*zeds' * Mq * zeds + m*g*l*(cos(theta) - 1);
+
+    % Swing-up control input
     ke = 1;
     kv = 1;
-    kx = 10^-1;
+    kx = 0.1;
     kdelta = 0.01;
 
-    %forming z
-    z2 = dx;
-    z5 = dtheta;
-    z3 = cos(theta);
+    numerator = kv * m * sin(theta) * (g * cos(theta) - l * dtheta^2) - (M + m * (sin(theta))^2) * (kx * x + kdelta * dx);
+    denominator = kv + (M + m * sin(theta)^2) * ke * E;
+    f_swingup = numerator / denominator;
 
-    zeds = [ z2; z5];
-
-    E = (1/2)*zeds' * Mq * zeds + m*g*l*(z3 - 1);
-
-    % Calculate the numerator
-    numerator = kv * m * sin(theta) * (g * cos(theta) - l*dtheta^2) - (M + m * (sin(theta))^2) * (kx*x + kdelta*dx);
-
-   % Calculate the denominator
-    denominator = kv + (M + m * sin(theta)^2) * ke*E;
-
-   %control input
-    f = numerator/denominator;
-
-    % Control input (no control for open-loop simulation)
-    tau = [ f; 0];  % No external forces applied
+    % Control input (no LQR for simplicity here)
+    f = f_swingup;
+    
+    % Control input vector
+    tau = [f; 0];
 
     % Solve for accelerations
     ddq = Mq \ (tau - Cq * [dx; dtheta] - Gq);
 
     % State derivatives
     ds = [dx; dtheta; ddq];
+
+    % Return energy for plotting
+    energy = E;
 end
