@@ -6,7 +6,7 @@ function cart_pole_animation
     g = 9.81; % gravity
 
     % Initial conditions: [x, theta, dx, dtheta]
-    s0 = [0; pi; 0; 0];  % Pendulum starts pointing down (theta = pi)
+    s0 = [0; pi/4; 0; 0];  % Pendulum starts pointing down (theta = pi)
 
     % Time span for simulation
     tspan = [0 10];  % Simulate for 10 seconds
@@ -37,19 +37,19 @@ function ds = cart_pole_ode(~, s, M, m, l, g)
 
     %attempt 1 to add the control law
     % Define variables
-    ke = 1;
-    kv = 1;
-    kx = 10^-2;
-    kdelta = 0;
+    %ke = 1;
+    %kv = 1;
+    %kx = 10^-2;
+    %kdelta = 0;
 
     % Calculate the numerator
-    numerator = kv * m * sin(theta) * (g * cos(theta) - l*dtheta^2) - (M + m * (sin(theta))^2) * (kx*x + kdelta*dx);
+    %numerator = kv * m * sin(theta) * (g * cos(theta) - l*dtheta^2) - (M + m * (sin(theta))^2) * (kx*x + kdelta*dx);
 
    % Calculate the denominator
-   denominator = kv + (M + m * sin(theta)^2) * kv*E;
+   %denominator = kv + (M + m * sin(theta)^2) * kv*E;
 
    %control input
-   f = numerator/denominator;
+   %f = numerator/denominator;
 
     % Control input (no control for open-loop simulation)
     tau = [0; 0];  % No external forces applied
