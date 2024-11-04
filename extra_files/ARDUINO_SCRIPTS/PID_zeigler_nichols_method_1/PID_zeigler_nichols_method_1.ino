@@ -35,8 +35,8 @@ double controller_input[3] = { 0.0, 0.0, 0.0};//u[k], u[k-1], u[k-2]
 double controller_output[3] = { 0.0, 0.0, 0.0};//y[k], y[k-1], y[k-2]
 
 //coefficient storage
-double output_coeffs[3] = { 1.0, 0.0, 1.0};//output coeffs y[k], y[k-1]
-double input_coeffs[3] = { 49.81, -85.52, 37.47};//input coeffs, u[k], u[k-1], u[k-2]
+double output_coeffs[2] = { 1.0, 1.0};//output coeffs y[k], y[k-1]
+double input_coeffs[2] = { 5.143, -5.143};//input coeffs, u[], u[k-1]
 /*.......................REPLACE CONTROLLER INITITALIZATION HERE.........................................*/
 
 
@@ -118,11 +118,12 @@ void loop()
     double ref = 2.5;
     double error = ref - yn;
 
+
+    //computing the controller values
+    //replacing the values
     controller_input[0] = error;
-    controller_output[0] =  output_coeffs[1]*controller_output[1] + output_coeffs[2]*controller_output[2] + input_coeffs[0]*controller_input[0] + input_coeffs[1]*controller_input[1] +  input_coeffs[2]*controller_input[2];
-    controller_input[2] = controller_input[1];
+    controller_output[0] = output_coeffs[1]*controller_output[1] + input_coeffs[0]*controller_input[0] + input_coeffs[1]*controller_input[1];
     controller_input[1] = controller_input[0];
-    controller_output[2] = controller_output[1];
     controller_output[1] = controller_output[0];
 /*.........................................REPLACE HERE FOR THE CONTROLLER..........................................................*/
     
