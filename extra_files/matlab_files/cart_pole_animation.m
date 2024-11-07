@@ -9,7 +9,7 @@ function cart_pole_animation
     s0 = [0; pi/4; 0; 0];  % Cart at 0, pendulum at 45 degrees
 
     % Time span for simulation
-    tspan = [0 10];  % Simulate for 10 seconds
+    tspan = [0 1000];  % Simulate for 10 seconds
 
     % Solve ODE using ode45
     [t, s] = ode45(@(t, s) cart_pole_ode(t, s, M, m, l, g), tspan, s0);
