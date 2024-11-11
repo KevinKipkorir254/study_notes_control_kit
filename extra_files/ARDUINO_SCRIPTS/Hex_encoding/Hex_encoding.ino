@@ -30,10 +30,11 @@ received_upper = Serial.read();
 
 Serial.print(',');
 
-  while (Serial.available() == 0) {
-  }
+while (Serial.available() == 0) {
+}
 
 received_lower = Serial.read();
+
 
 hex = received_upper;
 hex = hex << 8;
@@ -42,6 +43,8 @@ Serial.println(hex);
 //Serial.println("Done");
 Serial.flush();
 
+
 }
+
 
 }

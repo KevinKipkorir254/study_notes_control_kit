@@ -15,7 +15,7 @@ upper_byte = 0x00  # Example value for the upper byte
 lower_byte = 0x00  # Example value for the lower byte
 
 # Set the frequency to 50 Hz (delay of 1/50 seconds per iteration)
-delay = 1 / 100  # 0.02 seconds (50 Hz)
+delay = 1 / 800  # 0.02 seconds (50 Hz)
 
 try:
     while True:
@@ -24,14 +24,14 @@ try:
         
         # Read the comma returned by Arduino as a separator (optional, can be omitted if not used)
         if ser.read() == b',':
-            print(".")
+            pass
 
         # Send the first byte
         ser.write(bytes([upper_byte]))
         
         # Read the comma returned by Arduino as a separator (optional, can be omitted if not used)
         if ser.read() == b',':
-            print(".")
+            pass
         
         # Send the second byte
         ser.write(bytes([lower_byte]))
